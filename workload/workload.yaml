@@ -1,0 +1,69 @@
+apiVersion: scheduler.kalypso.io/v1alpha1
+kind: Workload
+metadata:
+  name: ct
+  labels:
+    type: application
+spec:
+  deploymentTargets:
+    - name: functional-test-dev-gray
+      labels:
+        purpose: functional-test
+        location: east-us
+        zone: gray
+        application: control-tower
+      environment: dev
+      manifests:
+        repo: https://github.com/eedorenko/control-tower-gitops
+        branch: dev-gray
+        path: ./functional-test
+    - name: functional-test-dev-green
+      labels:
+        purpose: functional-test
+        zone: green
+        application: control-tower
+      environment: dev
+      manifests:
+        repo: https://github.com/eedorenko/control-tower-gitops
+        branch: dev-green
+        path: ./functional-test
+    - name: functional-test-dev-red
+      labels:
+        purpose: functional-test
+        zone: red
+        application: control-tower
+      environment: dev
+      manifests:
+        repo: https://github.com/eedorenko/control-tower-gitops
+        branch: dev-red
+        path: ./functional-test    
+    - name: uat-test-stage-gray
+      labels:
+        purpose: uat-test
+        zone: gray
+        application: control-tower
+      environment: stage
+      manifests:
+        repo: https://github.com/eedorenko/control-tower-gitops
+        branch: stage-gray
+        path: ./uat-test
+    - name: uat-test-stage-green
+      labels:
+        purpose: uat-test
+        zone: green
+        application: control-tower
+      environment: stage
+      manifests:
+        repo: https://github.com/eedorenko/control-tower-gitops
+        branch: stage-green
+        path: ./uat-test
+    - name: uat-test-stage-red
+      labels:
+        purpose: uat-test
+        zone: red
+        application: control-tower
+      environment: stage
+      manifests:
+        repo: https://github.com/eedorenko/control-tower-gitops
+        branch: stage-red
+        path: ./uat-test              
