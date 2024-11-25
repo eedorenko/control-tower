@@ -21,8 +21,6 @@ set -euo pipefail
 
 gen_manifests_file_name='gen_manifests.yaml'
 values_file_name='values.yaml'
-deployment_descriptor_file_name='deployment_descriptor.yaml'
-deployment_descriptor_template='.github/workflows/utils/templates/deployment-descriptor-template.yaml'
 
 
 mkdir -p $GENERATED_MANIFESTS_FOLDER
@@ -66,18 +64,11 @@ for dir in `find . -type d \( ! -name . \)`; do
         kustomize create --autodetect
         popd
 
-        # extract deployment target like "/home/runner/work/hello-world/hello-world/manifests/./functional-test/east-us" -> "functional-test-east-us" but "/home/runner/work/hello-world/hello-world/manifests/./functional-test" -> "functional-test"
-        deployment_target=$(echo $manifests_dir | sed 's/.*\.\(.*\)/\1/' | sed 's/\//-/g' | sed 's/^-//')
-    
-
-        # extract the path by removing everything before "."" e.g. "/home/runner/work/hello-world/hello-world/manifests/./functional-test/east-us" -> "./functional-test/east-us" 
-        deployment_target_path=$(echo $manifests_dir | sed 's/.*\.\(.*\)/\.\1/')
+        # # Generate deployment descriptor
+        # deployment_target=$(echo $manifests_dir | rev | cut -d'/' -f1 | rev)
         
-
-        
-        
-        mkdir -p $manifests_dir/descriptor
-        $GITHUB_WORKSPACE/.github/workflows/utils/generate-deployment-descriptor.sh  $deployment_target $deployment_target_path $manifests_dir/descriptor/$deployment_descriptor_file_name $GITHUB_WORKSPACE/$deployment_descriptor_template
+        # mkdir -p $manifests_dir/descriptor
+        # $GITHUB_WORKSPACE/.github/workflows/utils/generate-deployment-descriptor.sh  $deployment_target $manifests_dir/descriptor/$deployment_descriptor_file_name $GITHUB_WORKSPACE/$deployment_descriptor_template
 
         rm $manifests_dir/$values_file_name
     fi
